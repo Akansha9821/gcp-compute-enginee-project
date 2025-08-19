@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flask Form with Background</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* Flask will serve this image from static/images/ */
+      background: url("{{ url_for('static', filename='images/Untitled design (1).png') }}") no-repeat center center/cover;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #response {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Enter Something</h2>
+    <input type="text" id="userInput" placeholder="Type here...">
+    <br>
+    <button onclick="submitForm()">Submit</button>
+    <p id="response"></p>
+  </div>
+
+  <script>
+    function submitForm() {
+      const userInput = document.getElementById("userInput").value;
+
+      fetch("/submit", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ user_input: userInput })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("response").innerText = data.message;
+      });
+    }
+  </script>
+</body>
+</html>
